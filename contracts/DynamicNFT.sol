@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract DynamicNFT is ERC721Enumerable, Ownable {
+contract ImprovedDynamicNFT is ERC721Enumerable, Ownable {
+    using Counters for Counters.Counter;
     using Strings for uint256;
 
     // Base URI for metadata
@@ -12,6 +14,9 @@ contract DynamicNFT is ERC721Enumerable, Ownable {
 
     // Mapping to store the music data associated with each token
     mapping(uint256 => string) private _musicData;
+
+    // Counter for token IDs
+    Counters.Counter private _tokenIdCounter;
 
     constructor(string memory name, string memory symbol, string memory baseTokenURI) ERC721(name, symbol) {
         _baseTokenURI = baseTokenURI;
@@ -24,9 +29,10 @@ contract DynamicNFT is ERC721Enumerable, Ownable {
 
     // Mint a new NFT with associated music data
     function mintWithMusicData(address to, string memory musicData) external onlyOwner {
-        uint256 tokenId = totalSupply() + 1;
+        uint256 tokenId = _tokenIdCounter.current();
         _mint(to, tokenId);
         _musicData[tokenId] = musicData;
+        _tokenIdCounter.increment();
     }
 
     // Retrieve the music data associated with a token

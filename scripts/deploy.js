@@ -1,16 +1,16 @@
+const { ethers } = require("hardhat");
+
 async function main() {
-  const [deployer] = await ethers.getSigners();
-
-  console.log(`Deploying contracts with the account: ${deployer.address}`);
-
-  const DynamicNFT = await ethers.getContractFactory("DynamicNFT");
-  const dynamicNFT = await DynamicNFT.deploy(
+  const ImprovedDynamicNFT = await ethers.getContractFactory(
+    "ImprovedDynamicNFT"
+  );
+  const improvedDynamicNFT = await ImprovedDynamicNFT.deploy(
     "DynamicNFT",
     "DNFT",
-    "https://your-base-uri.com/"
+    "https://my-nft-api.com/metadata/"
   );
 
-  console.log(`Contract address: ${dynamicNFT.address}`);
+  console.log("Contract deployed to:", improvedDynamicNFT.address);
 }
 
 main()
